@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ClueSharp;
 using NUnit.Framework;
 
@@ -104,6 +105,9 @@ namespace ClueBot.tests
       var s = "suggest";
       client.ProcessMessageString(ai, s);
       Assert.AreEqual("suggest", ai.Records[0]);
+      Assert.AreEqual(1, client.Sent.Count);
+      var suggestResponseRegex = new Regex("suggest( [A-Z][a-z]){3}");
+      Assert.IsTrue(suggestResponseRegex.IsMatch(client.Sent[0]));
     }
 
     [Test]
