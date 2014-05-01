@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using ClueSharp;
@@ -56,6 +57,8 @@ namespace ClueBot
             SendOK();
             break;
           }
+        default:
+          throw new ArgumentException("Bogus message: " + string.Join("|", pieces));
       }
       return false;
     }
