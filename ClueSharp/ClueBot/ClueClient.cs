@@ -57,6 +57,12 @@ namespace ClueBot
             SendOK();
             break;
           }
+        case "suggest":
+          {
+            var suggestion = ai.Suggest();
+            Send("suggest " + suggestion.ToString());
+            break;
+          }
         default:
           throw new ArgumentException("Bogus message: " + string.Join("|", pieces));
       }
@@ -68,7 +74,8 @@ namespace ClueBot
       Send("ok");
     }
 
-    private void Send(string msg)
+    // virtual so it can be overridden to do nothing in mocking
+    protected virtual void Send(string msg)
     {
       var data = StringToByteArray(msg);
       m_stream.Write(data, 0, data.Length);

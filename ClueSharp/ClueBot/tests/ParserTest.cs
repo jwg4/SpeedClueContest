@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ClueSharp;
 using NUnit.Framework;
 
@@ -14,14 +13,14 @@ namespace ClueBot.tests
     [Test]
     public void TestParseOneCard()
     {
-      Assert.AreEqual(Room.BilliardsRoom, Parser.ParseOneCard("Bi"));
-      Assert.AreEqual(Room.BallRoom, Parser.ParseOneCard("Ba"));
+      Assert.AreEqual(Room.BilliardsRoom, EnumConversion.ParseOneCard("Bi"));
+      Assert.AreEqual(Room.BallRoom, EnumConversion.ParseOneCard("Ba"));
 
-      Assert.AreEqual(Suspect.MrsWhite, Parser.ParseOneCard("Wh"));
+      Assert.AreEqual(Suspect.MrsWhite, EnumConversion.ParseOneCard("Wh"));
 
-      Assert.AreEqual(Weapon.MonkeyWrench, Parser.ParseOneCard("Wr"));
+      Assert.AreEqual(Weapon.MonkeyWrench, EnumConversion.ParseOneCard("Wr"));
 
-      Assert.Throws<ArgumentException>(() => Parser.ParseOneCard("Jw"));
+      Assert.Throws<ArgumentException>(() => EnumConversion.ParseOneCard("Jw"));
     }
 
     [Test]

@@ -1,47 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using ClueSharp;
 
 namespace ClueBot
 {
   class Parser
   {
-    private static Dictionary<string, object> lookup; 
-    
-    static Parser()
-    {
-      lookup = new Dictionary<string, object>();
-
-      AddValues<Suspect>();
-      AddValues<Weapon>();
-      AddValues<Room>();
-    }
-
-    private static void AddValues<T>()
-    {
-      var enumType = typeof (T);
-      foreach (Enum val in Enum.GetValues(enumType))
-      {
-        FieldInfo fi = enumType.GetField(val.ToString());
-        var attributes = (CodeAttribute[]) fi.GetCustomAttributes(
-          typeof (CodeAttribute), false);
-        CodeAttribute attr = attributes[0];
-        lookup[attr.Code] = (T)(object)val;
-      }
-    }
 
     internal static CardCollection ParseCards(IEnumerable<string> strings)
     {
-      return new CardCollection(strings.Select(ParseOneCard).ToList());
-    }
-
-    internal static object ParseOneCard(string s)
-    {
-      if (!lookup.ContainsKey(s))
-      throw new ArgumentException();
-      return lookup[s];
+      return new CardCollection(strings.Select(EnumConversion.ParseOneCard).ToList());
     }
 
     internal static int ParseInt(string s)
@@ -52,7 +21,7 @@ namespace ClueBot
     public static MurderSet ParseSet(IEnumerable<string> cards)
     {
       var cardList = cards.ToList();
-      return new MurderSet(ParseOneCard(cardList[0]), ParseOneCard(cardList[1]), ParseOneCard(cardList[2]));
+      return new MurderSet(ClueSharp.EnumConversion.ParseOneCard(cardList[0]), ClueSharp.EnumConversion.ParseOneCard(cardList[1]), ClueSharp.EnumConversion.ParseOneCard(cardList[2]));
     }
 
     public static Card ParseCard(string s)

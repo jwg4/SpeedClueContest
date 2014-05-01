@@ -67,8 +67,10 @@ namespace ClueBot.tests
         : base(null)
       {}
 
-      protected override void SendOK()
-      {}
+      protected override void Send(string msg)
+      {
+        // do nothing
+      }
     }
 
     [SetUp]
@@ -84,6 +86,15 @@ namespace ClueBot.tests
       var s = "reset 4 3 Gr Sc St Bi";
       client.ProcessMessageString(ai, s);
       Assert.AreEqual("reset", ai.Records[0]);
+
+    }
+
+    [Test]
+    public void TestProcessMessageStringSuggest()
+    {
+      var s = "suggest";
+      client.ProcessMessageString(ai, s);
+      Assert.AreEqual("suggest", ai.Records[0]);
     }
 
     [Test]
