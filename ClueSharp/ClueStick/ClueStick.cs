@@ -16,7 +16,6 @@ namespace ClueStick
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
     {
-      throw new NotImplementedException();
     }
 
     public void Accusation(int accuser, MurderSet suggestion, bool won)
