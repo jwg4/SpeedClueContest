@@ -51,7 +51,8 @@ namespace ClueBot
 
     public static MurderSet ParseSet(IEnumerable<string> cards)
     {
-      throw new NotImplementedException();
+      var cardList = cards.ToList();
+      return new MurderSet(ParseOneCard(cardList[0]), ParseOneCard(cardList[1]), ParseOneCard(cardList[2]));
     }
 
     public static Card ParseCard(string s)

@@ -48,5 +48,15 @@ namespace ClueBot.tests
       Assert.AreEqual(1, collection.Weapons.Count());
       Assert.AreEqual(3, collection.Rooms.Count());
     }
+
+    [Test]
+    public void TestParseSetValid()
+    {
+      var s = new[] {"Sc", "Pi", "Di"};
+      var set = Parser.ParseSet(s);
+      Assert.AreEqual(Suspect.MissScarlet, set.Suspect);
+      Assert.AreEqual(Weapon.LeadPipe, set.Weapon);
+      Assert.AreEqual(Room.DiningRoom, set.Room);
+    }
   }
 }
