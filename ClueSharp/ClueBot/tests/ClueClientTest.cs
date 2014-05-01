@@ -10,7 +10,7 @@ namespace ClueBot.tests
   [TestFixture]
   class ClueClientTest
   {
-    private ClueClient client;
+    private DummyClient client;
     private DummyAI ai;
 
     class DummyAI : IClueAI
@@ -63,13 +63,22 @@ namespace ClueBot.tests
 
     class DummyClient : ClueClient
     {
+      private readonly List<string> m_sent;
+
       public DummyClient()
         : base(null)
-      {}
+      {
+        m_sent = new List<string>();
+      }
+
+      public List<string> Sent
+      {
+        get { return m_sent; }
+      }
 
       protected override void Send(string msg)
       {
-        // do nothing
+        Sent.Add(msg);
       }
     }
 
@@ -86,7 +95,7 @@ namespace ClueBot.tests
       var s = "reset 4 3 Gr Sc St Bi";
       client.ProcessMessageString(ai, s);
       Assert.AreEqual("reset", ai.Records[0]);
-
+      Assert.AreEqual("ok", client.Sent[0]);
     }
 
     [Test]
