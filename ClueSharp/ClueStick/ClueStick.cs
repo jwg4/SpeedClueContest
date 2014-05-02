@@ -13,14 +13,16 @@ namespace ClueStick
       private List<Room> m_rooms;
       private readonly IEnumerator<MurderSet> m_suggestions;
       private MurderSet? m_accusation;
+    private int m_identity;
 
-      public ClueStick()
+    public ClueStick()
       {
         m_suggestions = MurderSet.AllSuggestions.GetEnumerator();
       }
 
       public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
       {
+        m_identity = i;
         m_suspects = suspects.ToList();
         m_weapons = weapons.ToList();
         m_rooms = rooms.ToList();
@@ -28,7 +30,7 @@ namespace ClueStick
 
       public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
       {
-        if (disproof == null)
+        if (disprover == null && suggester != m_identity)
         {
           m_accusation = suggestion;
         }
