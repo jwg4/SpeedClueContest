@@ -3,24 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using ClueSharp;
 using ClueSharp.tests;
-using NUnit.Framework;
 
 namespace ClueStick
 {
-    public class Program : ClueBot.ProgramTemplate<ClueStick>
-    {
-      public static void Main(string[] args)
-      {
-        new Program().DoMain(args);
-      }
-    }
-
-    public class ClueStick : IClueAI
+  public class ClueStick : IClueAI
     {
       private List<Suspect> m_suspects;
       private List<Weapon> m_weapons;
       private List<Room> m_rooms;
-      private IEnumerator<MurderSet> m_suggestions;
+      private readonly IEnumerator<MurderSet> m_suggestions;
       private MurderSet? m_accusation;
 
       public ClueStick()
