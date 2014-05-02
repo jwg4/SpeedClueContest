@@ -40,7 +40,7 @@ namespace ClueStick
 
     public MurderSet? Accuse()
     {
-      throw new NotImplementedException();
+      return null;
     }
 
     public Card Disprove(int player, MurderSet suggestion)

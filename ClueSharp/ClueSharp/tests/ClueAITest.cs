@@ -14,9 +14,16 @@ namespace ClueSharp.tests
     }
 
     [Test]
+    public void AccuseTest()
+    {
+      m_ai.Reset(4, 3, new[] { Suspect.MissScarlet }, new Weapon[0], new[] { Room.Kitchen, Room.Conservatory, Room.Lounge });
+      m_ai.Accuse();
+    }
+
+    [Test]
     public void DisproveTest()
     {
-      m_ai.Reset(4, 3, new[] {Suspect.MissScarlet}, new Weapon[0], new[] {Room.Kitchen, Room.Conservatory, Room.Lounge} );
+      m_ai.Reset(4, 3, new[] { Suspect.MissScarlet }, new Weapon[0], new[] { Room.Kitchen, Room.Conservatory, Room.Lounge });
       var disproof = m_ai.Disprove(0, new MurderSet(Suspect.MrGreen, Weapon.LeadPipe, Room.Kitchen));
       Assert.AreEqual(new Card(Room.Kitchen), disproof);
     }
