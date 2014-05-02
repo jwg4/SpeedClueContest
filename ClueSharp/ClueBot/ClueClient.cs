@@ -63,6 +63,26 @@ namespace ClueBot
             Send("suggest " + suggestion.ToString());
             break;
           }
+        case "accuse":
+          {
+            var accusation = ai.Accuse();
+            Send(accusation == null
+                   ? "-"
+                   : "accuse " + accusation.ToString()
+              );
+            break;
+          }
+        case "disprove":
+          {
+            var player = Parser.ParseInt(pieces[1]);
+            var suggestion = Parser.ParseSet(pieces.Skip(2).Take(3));
+            var disproof = ai.Disprove(player, suggestion);
+            Send(disproof == null
+                   ? "-"
+                   : "show " + disproof.ToString()
+              );
+            break;
+          }
         default:
           throw new ArgumentException("Bogus message: " + string.Join("|", pieces));
       }

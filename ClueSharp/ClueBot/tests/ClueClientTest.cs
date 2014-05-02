@@ -111,6 +111,29 @@ namespace ClueBot.tests
     }
 
     [Test]
+    public void TestProcessMessageStringDisprove()
+    {
+      var s = "disprove 0 Sc Ca Bi";
+      client.ProcessMessageString(ai, s);
+      Assert.AreEqual("disprove", ai.Records[0]);
+      Assert.AreEqual(1, client.Sent.Count);
+      var suggestResponseRegex = new Regex("-|show( [A-Z][a-z]){0,1}");
+      Assert.IsTrue(suggestResponseRegex.IsMatch(client.Sent[0]));
+    }
+
+
+    [Test]
+    public void TestProcessMessageStringAccuse()
+    {
+      var s = "accuse";
+      client.ProcessMessageString(ai, s);
+      Assert.AreEqual("accuse", ai.Records[0]);
+      Assert.AreEqual(1, client.Sent.Count);
+      var suggestResponseRegex = new Regex("-|accuse( [A-Z][a-z]){3}");
+      Assert.IsTrue(suggestResponseRegex.IsMatch(client.Sent[0]));
+    }
+
+    [Test]
     public void TestProcessMessageStringWithNulls()
     {
       var s = "reset 4 3 Gr Sc St Bi\0\0\0\0\0\0\0\0\0\0";
