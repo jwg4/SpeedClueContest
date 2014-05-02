@@ -7,69 +7,77 @@ using NUnit.Framework;
 
 namespace ClueStick
 {
-  public class ClueStick : IClueAI
-  {
-    private List<Suspect> m_suspects;
-    private List<Weapon> m_weapons;
-    private List<Room> m_rooms;
-    private IEnumerator<MurderSet> m_suggestions;
-    private MurderSet? m_accusation;
-
-    public ClueStick()
+    public class Program : ClueBot.ProgramTemplate<ClueStick>
     {
-      m_suggestions = MurderSet.AllSuggestions.GetEnumerator();
-    }
-
-    public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
-    {
-      m_suspects = suspects.ToList();
-      m_weapons = weapons.ToList();
-      m_rooms = rooms.ToList();
-    }
-
-    public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
-    {
-      if (disproof == null)
+      public static void Main(string[] args)
       {
-        m_accusation = suggestion;
+        new Program().DoMain(args);
       }
     }
 
-    public void Accusation(int accuser, MurderSet suggestion, bool won)
+    public class ClueStick : IClueAI
     {
-    }
+      private List<Suspect> m_suspects;
+      private List<Weapon> m_weapons;
+      private List<Room> m_rooms;
+      private IEnumerator<MurderSet> m_suggestions;
+      private MurderSet? m_accusation;
 
-    public MurderSet Suggest()
-    {
-      if (!m_suggestions.MoveNext())
+      public ClueStick()
       {
-        throw new Exception("Run out of suggestions");
+        m_suggestions = MurderSet.AllSuggestions.GetEnumerator();
       }
-      return m_suggestions.Current;
-    }
 
-    public MurderSet? Accuse()
-    {
-      return m_accusation;
-    }
+      public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
+      {
+        m_suspects = suspects.ToList();
+        m_weapons = weapons.ToList();
+        m_rooms = rooms.ToList();
+      }
 
-    public Card Disprove(int player, MurderSet suggestion)
-    {
-      if (m_suspects.IndexOf(suggestion.Suspect) != -1)
+      public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
       {
-        return new Card(suggestion.Suspect);
+        if (disproof == null)
+        {
+          m_accusation = suggestion;
+        }
       }
-      if (m_weapons.IndexOf(suggestion.Weapon) != -1)
+
+      public void Accusation(int accuser, MurderSet suggestion, bool won)
       {
-        return new Card(suggestion.Weapon);
       }
-      if (m_rooms.IndexOf(suggestion.Room) != -1)
+
+      public MurderSet Suggest()
       {
-        return new Card(suggestion.Room);
+        if (!m_suggestions.MoveNext())
+        {
+          throw new Exception("Run out of suggestions");
+        }
+        return m_suggestions.Current;
       }
-      return null;
+
+      public MurderSet? Accuse()
+      {
+        return m_accusation;
+      }
+
+      public Card Disprove(int player, MurderSet suggestion)
+      {
+        if (m_suspects.IndexOf(suggestion.Suspect) != -1)
+        {
+          return new Card(suggestion.Suspect);
+        }
+        if (m_weapons.IndexOf(suggestion.Weapon) != -1)
+        {
+          return new Card(suggestion.Weapon);
+        }
+        if (m_rooms.IndexOf(suggestion.Room) != -1)
+        {
+          return new Card(suggestion.Room);
+        }
+        return null;
+      }
     }
-  }
 
   public class ClueStickTest : ClueAITest<ClueStick>
   {}
