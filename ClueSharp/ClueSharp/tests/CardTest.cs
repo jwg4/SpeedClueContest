@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace ClueSharp.tests
@@ -22,6 +23,13 @@ namespace ClueSharp.tests
     public void CanOnlyConstructFromACardEnumType()
     {
       Assert.Throws<Exception>(() => new Card("asdf"));
+    }
+
+    [Test]
+    public void TestAllValues()
+    {
+      const int total = (int)Suspect.Count + (int)Weapon.Count + (int)Room.Count;
+      Assert.AreEqual(total, Card.AllValues.Count());
     }
 
   }
