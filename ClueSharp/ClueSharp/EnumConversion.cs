@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace ClueSharp
@@ -27,6 +28,7 @@ namespace ClueSharp
         FieldInfo fi = enumType.GetField(val.ToString());
         var attributes = (CodeAttribute[]) fi.GetCustomAttributes(
           typeof (CodeAttribute), false);
+        if (!attributes.Any()) { continue; }
         CodeAttribute attr = attributes[0];
         var enumValue = (T) (object) val;
         Lookup[attr.Code] = enumValue;
