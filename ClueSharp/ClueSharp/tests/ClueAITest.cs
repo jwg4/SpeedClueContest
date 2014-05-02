@@ -14,14 +14,14 @@ namespace ClueSharp.tests
     }
 
     [Test]
-    public void AccuseTest()
+    public void TestAccuse()
     {
       m_ai.Reset(4, 3, new[] { Suspect.MissScarlet }, new Weapon[0], new[] { Room.Kitchen, Room.Conservatory, Room.Lounge });
       m_ai.Accuse();
     }
 
     [Test]
-    public void DisproveTest()
+    public void TestDisprove()
     {
       m_ai.Reset(4, 3, new[] { Suspect.MissScarlet }, new Weapon[0], new[] { Room.Kitchen, Room.Conservatory, Room.Lounge });
       var disproof = m_ai.Disprove(0, new MurderSet(Suspect.MrGreen, Weapon.LeadPipe, Room.Kitchen));
@@ -29,7 +29,7 @@ namespace ClueSharp.tests
     }
 
     [Test]
-    public void DisproveNoneTest()
+    public void TestDisproveReturnsNullWhenNoneAvailable()
     {
       m_ai.Reset(4, 3, new[] { Suspect.MissScarlet }, new Weapon[0], new[] { Room.Kitchen, Room.Conservatory, Room.Lounge });
       var disproof = m_ai.Disprove(0, new MurderSet(Suspect.MrGreen, Weapon.LeadPipe, Room.BilliardsRoom));
@@ -37,7 +37,7 @@ namespace ClueSharp.tests
     }
 
     [Test]
-    public void DontSuggestTheSameThingTwiceTest()
+    public void DontSuggestTheSameThingTwice()
     {
       m_ai.Reset(4, 3, new[] { Suspect.MissScarlet }, new Weapon[0], new[] { Room.Kitchen, Room.Conservatory, Room.Lounge });
       var suggestion1 = m_ai.Suggest();

@@ -16,7 +16,7 @@ namespace ClueSharp.tests
     }
 
     [Test]
-    public void ToStringTest()
+    public void TestToString()
     {
       Assert.AreEqual("Wr", new Card(Weapon.MonkeyWrench).ToString());
     }

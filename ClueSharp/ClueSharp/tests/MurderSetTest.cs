@@ -17,7 +17,7 @@ namespace ClueSharp.tests
     }
 
     [Test]
-    public void AllSuggestionsTest()
+    public void TestAllSuggestions()
     {
       int total = (int) Suspect.Count*(int) Weapon.Count*(int) Room.Count;
       Assert.AreEqual(total, MurderSet.AllSuggestions.Count());
