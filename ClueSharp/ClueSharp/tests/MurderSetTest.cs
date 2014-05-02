@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using NUnit.Framework;
 
 namespace ClueSharp.tests
@@ -19,7 +16,7 @@ namespace ClueSharp.tests
     [Test]
     public void TestAllSuggestions()
     {
-      int total = (int) Suspect.Count*(int) Weapon.Count*(int) Room.Count;
+      const int total = (int) Suspect.Count*(int) Weapon.Count*(int) Room.Count;
       Assert.AreEqual(total, MurderSet.AllSuggestions.Count());
     }
   }
