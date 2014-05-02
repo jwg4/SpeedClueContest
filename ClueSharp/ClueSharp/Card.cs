@@ -13,6 +13,10 @@ namespace ClueSharp
              o is Weapon ? (Weapon) o : Weapon.None,
              o is Room ? (Room) o : Room.None)
     {
+      if (m_suspect == Suspect.None && m_weapon == Weapon.None && m_room == Room.None)
+      {
+        throw new Exception("Constructed a card object without a valid card enum.");
+      }
     }
 
     private Card(Suspect suspect, Weapon weapon, Room room)

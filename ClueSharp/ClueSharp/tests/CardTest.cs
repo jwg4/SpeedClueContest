@@ -20,5 +20,12 @@ namespace ClueSharp.tests
     {
       Assert.AreEqual("Wr", new Card(Weapon.MonkeyWrench).ToString());
     }
+
+    [Test]
+    public void CanOnlyConstructFromACardEnumType()
+    {
+      Assert.Throws<Exception>(() => new Card("asdf"));
+    }
+
   }
 }
