@@ -8,7 +8,8 @@
     [Code("Pe")] MrsPeacock,
     [Code("Pl")] ProfPlum,
     [Code("Sc")] MissScarlet,
-    [Code("Wh")] MrsWhite
+    [Code("Wh")] MrsWhite,
+    Count
   }
 
   public enum Weapon
@@ -19,7 +20,8 @@
     [Code("Pi")] LeadPipe,
     [Code("Re")] Revolver,
     [Code("Ro")] Rope,
-    [Code("Wr")] MonkeyWrench
+    [Code("Wr")] MonkeyWrench,
+    Count
   }
 
   public enum Room
@@ -34,6 +36,7 @@
     [Code("Li")] Library,
     [Code("Lo")] Lounge,
     [Code("St")] Study,
+    Count
   }
 
 }

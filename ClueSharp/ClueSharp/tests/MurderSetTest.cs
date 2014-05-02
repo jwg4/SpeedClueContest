@@ -15,5 +15,12 @@ namespace ClueSharp.tests
       var set = new MurderSet(Suspect.ColMustard, Weapon.Revolver, Room.Lounge);
       Assert.AreEqual("Mu Re Lo", set.ToString());
     }
+
+    [Test]
+    public void AllSuggestionsTest()
+    {
+      int total = (int) Suspect.Count*(int) Weapon.Count*(int) Room.Count;
+      Assert.AreEqual(total, MurderSet.AllSuggestions.Count());
+    }
   }
 }

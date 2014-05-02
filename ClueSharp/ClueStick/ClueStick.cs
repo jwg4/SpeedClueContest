@@ -12,9 +12,11 @@ namespace ClueStick
     private List<Suspect> m_suspects;
     private List<Weapon> m_weapons;
     private List<Room> m_rooms;
+    private IEnumerator<MurderSet> m_suggestions;
 
     public ClueStick()
     {
+      m_suggestions = MurderSet.AllSuggestions.GetEnumerator();
     }
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
@@ -35,7 +37,11 @@ namespace ClueStick
 
     public MurderSet Suggest()
     {
-      return new MurderSet(Suspect.MrGreen, Weapon.Candlestick, Room.BallRoom);
+      if (!m_suggestions.MoveNext())
+      {
+        throw new Exception("Run out of suggestions");
+      }
+      return m_suggestions.Current;
     }
 
     public MurderSet? Accuse()

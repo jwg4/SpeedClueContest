@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ClueSharp
 {
@@ -40,6 +41,32 @@ namespace ClueSharp
       return EnumConversion.Convert(Suspect)
         + " " + EnumConversion.Convert(Weapon)
         + " " + EnumConversion.Convert(Room);
+    }
+
+    public static IEnumerable<MurderSet> AllSuggestions 
+    {
+      get
+      {
+        var suspects = Enum.GetValues(typeof (Suspect));
+        var weapons = Enum.GetValues(typeof(Weapon));
+        var rooms = Enum.GetValues(typeof(Room));
+        
+        foreach (var suspect in suspects)
+        {
+          foreach (var weapon in weapons)
+          {
+            foreach (var room in rooms)
+            {
+              // TODO: i don't like this
+              if ((Suspect)suspect == Suspect.None || (Suspect)suspect == Suspect.Count
+                || (Weapon)weapon == Weapon.None || (Weapon)weapon == Weapon.Count
+                || (Room)room == Room.None || (Room)room == Room.Count)
+              { continue; }
+                yield return new MurderSet(suspect, weapon, room);
+            }
+          }
+        }
+      }
     }
   }
 }
