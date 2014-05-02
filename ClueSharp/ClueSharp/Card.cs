@@ -19,5 +19,20 @@
       m_weapon = weapon;
       m_room = room;
     }
+
+    public override int GetHashCode()
+    {
+      return m_suspect.GetHashCode() + 99 * m_weapon.GetHashCode() + 99 * 99 * m_room.GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+      // todo: use GetHashCode() ?
+      var card = obj as Card;
+      if (card == null) return false;
+      return (m_suspect == card.m_suspect
+              && m_weapon == card.m_weapon
+              && m_room == card.m_room);
+    }
   }
 }
