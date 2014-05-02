@@ -11,21 +11,20 @@ namespace ClueBat
     private List<Suspect> m_suspects;
     private List<Weapon> m_weapons;
     private List<Room> m_rooms;
-    private readonly IEnumerator<MurderSet> m_suggestions;
-    private MurderSet? m_accusation = null;
-    private bool m_firstMove = true;
+    private IEnumerator<MurderSet> m_suggestions;
+    private MurderSet? m_accusation;
+    private bool m_firstMove;
     private int m_identity;
-
-    public ClueBat()
-    {
-      m_suggestions = MurderSet.AllSuggestions.GetEnumerator();
-    }
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
+      m_identity = i;
       m_suspects = suspects.ToList();
       m_weapons = weapons.ToList();
       m_rooms = rooms.ToList();
+      m_accusation = null;
+      m_firstMove = true;
+      m_suggestions = MurderSet.AllSuggestions.GetEnumerator();
     }
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
