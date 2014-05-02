@@ -25,7 +25,7 @@ namespace ClueStick
 
     public MurderSet Suggest()
     {
-      throw new NotImplementedException();
+      return new MurderSet(Suspect.MrGreen, Weapon.Candlestick, Room.BallRoom);
     }
 
     public MurderSet? Accuse()
