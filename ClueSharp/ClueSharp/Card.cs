@@ -2,9 +2,9 @@
 {
   public class Card
   {
-    private readonly Suspect m_s;
-    private readonly Weapon m_w;
-    private readonly Room m_r;
+    private readonly Suspect m_suspect;
+    private readonly Weapon m_weapon;
+    private readonly Room m_room;
 
     public Card(object o)
       : this(o is Suspect ? (Suspect) o : Suspect.None,
@@ -13,11 +13,11 @@
     {
     }
 
-    private Card(Suspect s, Weapon w, Room r)
+    private Card(Suspect suspect, Weapon weapon, Room room)
     {
-      m_s = s;
-      m_w = w;
-      m_r = r;
+      m_suspect = suspect;
+      m_weapon = weapon;
+      m_room = room;
     }
   }
 }
