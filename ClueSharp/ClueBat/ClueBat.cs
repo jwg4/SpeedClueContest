@@ -23,7 +23,6 @@ namespace ClueBat
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
-      m_identity = i;
       m_suspects = suspects.ToList();
       m_weapons = weapons.ToList();
       m_rooms = rooms.ToList();
@@ -31,7 +30,7 @@ namespace ClueBat
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
     {
-      if ((disproof == null) && (suggester != m_identity))
+      if (disprover == null && suggester != m_identity)
       {
         m_accusation = suggestion;
       }
