@@ -13,6 +13,7 @@ namespace ClueStick
     private List<Weapon> m_weapons;
     private List<Room> m_rooms;
     private IEnumerator<MurderSet> m_suggestions;
+    private MurderSet? m_accusation;
 
     public ClueStick()
     {
@@ -28,6 +29,10 @@ namespace ClueStick
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
     {
+      if (disproof == null)
+      {
+        m_accusation = suggestion;
+      }
     }
 
     public void Accusation(int accuser, MurderSet suggestion, bool won)
@@ -46,7 +51,7 @@ namespace ClueStick
 
     public MurderSet? Accuse()
     {
-      return null;
+      return m_accusation;
     }
 
     public Card Disprove(int player, MurderSet suggestion)
