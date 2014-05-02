@@ -1,4 +1,6 @@
-﻿namespace ClueSharp
+﻿using System;
+
+namespace ClueSharp
 {
   public class Card
   {
@@ -18,6 +20,23 @@
       m_suspect = suspect;
       m_weapon = weapon;
       m_room = room;
+    }
+
+    public override string ToString()
+    {
+      if (m_suspect != Suspect.None)
+      {
+        return EnumConversion.Convert(m_suspect);
+      }
+      if (m_weapon != Weapon.None)
+      {
+        return EnumConversion.Convert(m_weapon);
+      }
+      if (m_room != Room.None)
+      {
+        return EnumConversion.Convert(m_room);
+      }
+      throw new Exception("Card doesn't have any valid values");
     }
 
     public override int GetHashCode()

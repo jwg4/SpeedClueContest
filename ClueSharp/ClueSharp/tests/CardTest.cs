@@ -14,5 +14,11 @@ namespace ClueSharp.tests
     {
       Assert.AreEqual(new Card(Room.Kitchen), new Card(Room.Kitchen));
     }
+
+    [Test]
+    public void ToStringTest()
+    {
+      Assert.AreEqual("Wr", new Card(Weapon.MonkeyWrench).ToString());
+    }
   }
 }
