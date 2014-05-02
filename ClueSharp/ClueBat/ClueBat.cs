@@ -12,8 +12,9 @@ namespace ClueBat
     private List<Weapon> m_weapons;
     private List<Room> m_rooms;
     private readonly IEnumerator<MurderSet> m_suggestions;
-    private MurderSet? m_accusation;
+    private MurderSet? m_accusation = null;
     private bool m_firstMove = true;
+    private int m_identity;
 
     public ClueBat()
     {
@@ -22,6 +23,7 @@ namespace ClueBat
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
+      m_identity = i;
       m_suspects = suspects.ToList();
       m_weapons = weapons.ToList();
       m_rooms = rooms.ToList();
@@ -29,7 +31,7 @@ namespace ClueBat
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
     {
-      if (disproof == null)
+      if ((disproof == null) && (suggester != m_identity))
       {
         m_accusation = suggestion;
       }
