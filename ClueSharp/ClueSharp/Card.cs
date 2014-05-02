@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ClueSharp
 {
@@ -28,19 +30,7 @@ namespace ClueSharp
 
     public override string ToString()
     {
-      if (m_suspect != Suspect.None)
-      {
-        return EnumConversion.Convert(m_suspect);
-      }
-      if (m_weapon != Weapon.None)
-      {
-        return EnumConversion.Convert(m_weapon);
-      }
-      if (m_room != Room.None)
-      {
-        return EnumConversion.Convert(m_room);
-      }
-      throw new Exception("Card doesn't have any valid values");
+      return EnumConversion.Convert(Value);
     }
 
     public override int GetHashCode()
@@ -56,6 +46,76 @@ namespace ClueSharp
       return (m_suspect == card.m_suspect
               && m_weapon == card.m_weapon
               && m_room == card.m_room);
+    }
+
+    public static IEnumerable<Suspect> AllSuspects
+    {
+      get
+      {
+        return Enum.GetValues(typeof(Suspect))
+          .Cast<Suspect>()
+          .Where(suspect => suspect != Suspect.None && suspect != Suspect.Count);
+      }
+    }
+
+    public static IEnumerable<Weapon> AllWeapons
+    {
+      get
+      {
+        return Enum.GetValues(typeof(Weapon))
+          .Cast<Weapon>()
+          .Where(weapon => weapon != Weapon.None && weapon != Weapon.Count);
+      }
+    }
+
+    public static IEnumerable<Room> AllRooms
+    {
+      get
+      {
+        return Enum.GetValues(typeof(Room))
+          .Cast<Room>()
+          .Where(room => room != Room.None && room != Room.Count);
+      }
+    }
+
+    public static IEnumerable<Enum> AllValues
+    {
+      // Todo: simplify this and MurderSet.AllCombinations
+      get
+      {
+        foreach (var suspect in AllSuspects)
+        {
+          yield return suspect;
+        }
+        foreach (var weapon in AllWeapons)
+        {
+          yield return weapon;
+        }
+        foreach (var room in AllRooms)
+        {
+          yield return room;
+        }
+      }
+    }
+
+    public Enum Value
+    {
+      get
+      {
+        if (m_suspect != Suspect.None)
+        {
+          return m_suspect;
+        }
+        if (m_weapon != Weapon.None)
+        {
+          return m_weapon;
+        }
+        if (m_room != Room.None)
+        {
+          return m_room;
+        }
+        throw new Exception("Card doesn't have any valid values");
+      }
     }
   }
 }
