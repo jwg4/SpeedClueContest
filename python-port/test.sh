@@ -5,10 +5,7 @@ else
     PORT=8889
 fi
 BUF=--buf
-python -m speedclue $BUF --port $PORT --count 5 \
-    ../entries/peter_taylor/dist/InferencePlayer.jar\
-    ../core/randomAI.jar\
-    ../core/randomAI.jar\
-    ../core/randomAI.jar\
-    ./simpleai.py\
-    ./simpleai.py
+python3 -m speedclue $BUF --port $PORT --count 500 \
+    ../ClueSharp/ClueStick/bin/Debug/ClueStick.exe\
+    ../ClueSharp/ClueStick/bin/Debug/ClueStick.exe\
+    ../ClueSharp/ClueBat/bin/Debug/ClueBat.exe
