@@ -26,7 +26,8 @@ namespace ClueBot
 
     public static Card ParseCard(string s)
     {
-      throw new NotImplementedException();
+      var o = EnumConversion.ParseOneCard(s);
+      return new Card(o);
     }
 
     public static int? ParseIntMaybe(string s)

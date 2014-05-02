@@ -2,6 +2,7 @@
 {
   public enum Suspect
   {
+    None = -1,
     [Code("Gr")] MrGreen,
     [Code("Mu")] ColMustard,
     [Code("Pe")] MrsPeacock,
@@ -12,6 +13,7 @@
 
   public enum Weapon
   {
+    None = -1,
     [Code("Ca")] Candlestick,
     [Code("Kn")] Knife,
     [Code("Pi")] LeadPipe,
@@ -22,6 +24,7 @@
 
   public enum Room
   {
+    None = -1,
     [Code("Ba")] BallRoom,
     [Code("Bi")] BilliardsRoom,
     [Code("Co")] Conservatory,
