@@ -7,6 +7,5 @@ fi
 BUF=--buf
 python3 -m speedclue $BUF --port $PORT --count 5 \
     ../ClueSharp/ClueStick/bin/Debug/ClueStick.exe\
-    ./simpleai.py\
-    ./simpleai.py\
-    ./simpleai.py
+    ../ClueSharp/ClueStick/bin/Debug/ClueStick.exe\
+    ../ClueSharp/ClueBat/bin/Debug/ClueBat.exe
