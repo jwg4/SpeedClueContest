@@ -3,31 +3,41 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using ClueSharp;
+using ClueSharp.tests;
 
-namespace CluePaddle
+namespace ClueByFour
 {
-  class CluePaddle : IClueAI
+  public class ClueByFour: IClueAI
   {
-    private int m_n;
     private int m_i;
     private List<Suspect> m_suspects;
     private List<Weapon> m_weapons;
     private List<Room> m_rooms;
-    private CardTracker m_cardTracker;
     private Dictionary<int, List<Card>> m_alreadyShown;
     private static readonly Random Rnd = new Random();
     private Dictionary<MurderSet, int> m_usedSuggestions;
+    private Dictionary<Enum, int> m_ownedBy;
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
-      m_n = n;
       m_i = i;
       m_suspects = suspects.ToList();
       m_weapons = weapons.ToList();
       m_rooms = rooms.ToList();
 
-      m_cardTracker = new CardTracker(n);
-      m_cardTracker.SetMyCards(i, m_suspects, m_weapons, m_rooms);
+      m_ownedBy = new Dictionary<Enum, int>();
+      foreach (var s in m_suspects)
+      {
+        m_ownedBy[s] = m_i;
+      }
+      foreach (var w in m_weapons)
+      {
+        m_ownedBy[w] = m_i;
+      }
+      foreach (var r in m_rooms)
+      {
+        m_ownedBy[r] = m_i;
+      }
 
       m_alreadyShown = new Dictionary<int, List<Card>>();
       for (int k = 0; k < n; k++)
@@ -40,54 +50,24 @@ namespace CluePaddle
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
     {
-      List<int> nonDisprovers = NonDisprovers(suggester, disprover).ToList();
-
-      foreach (var player in nonDisprovers)
-      {
-        m_cardTracker.DoesntHaveAnyOf(player, suggestion);
-      }
-
-      if (disprover != null && disproof == null)
-      {
-        // We know who disproved it but not what they showed.
-        Debug.Assert(disprover != m_i, "The disprover should see the disproof");
-        Debug.Assert(suggester != m_i, "The suggester should see the disproof");
-        m_cardTracker.DoesntHaveAllOf(suggester, suggestion);
-        m_cardTracker.HasOneOf((int)disprover, suggestion);
-      }
-
       if (disproof != null)
       {
         // We know who disproved it and what they showed.
         Debug.Assert(disprover != null, "disproof is not null but disprover is null");
-        m_cardTracker.DoesHave((int)disprover, disproof.Value);
-      }
-    }
-
-    public IEnumerable<int> NonDisprovers(int suggester, int? disprover)
-    {
-      int k = (suggester + 1) % m_n;
-
-      while (k != suggester && k != disprover)
-      {
-        yield return k;
-        k++;
-        k = k % m_n;
+        m_ownedBy[disproof.Value] = (int)disprover;
       }
     }
 
     public void Accusation(int accuser, MurderSet suggestion, bool won)
     {
-      if (!won)
-      {
-        m_cardTracker.DoesntHaveAllOf(m_n, suggestion);
-      }
+      // todo: If we know two of the cards in the murder envelope,
+      // we can rule out the third one here
     }
 
     public MurderSet Suggest()
     {
       // todo: do this nicely?
-      var maybes = m_cardTracker.Maybes;
+      var maybes = Maybes;
       MurderSet randomSuggestion;
       do
       {
@@ -96,6 +76,11 @@ namespace CluePaddle
 
       m_usedSuggestions[randomSuggestion] = 1;
       return randomSuggestion;
+    }
+
+    private List<Enum> Maybes
+    {
+      get { return Card.AllValues.Where(x => !m_ownedBy.ContainsKey(x)).ToList(); }
     }
 
     private static MurderSet GetRandomSuggestion(List<Enum> maybes)
@@ -146,8 +131,15 @@ namespace CluePaddle
 
     public MurderSet? Accuse()
     {
-      m_cardTracker.ProcessInferences();
-      return m_cardTracker.GetAccusation();
+      var maybes = Maybes;
+      if (maybes.Count == 3)
+      {
+        return new MurderSet(maybes.OfType<Suspect>().Single(),
+                             maybes.OfType<Weapon>().Single(),
+                             maybes.OfType<Room>().Single()
+          );
+      }
+      return null;
     }
 
     public Card Disprove(int player, MurderSet suggestion)
@@ -166,5 +158,9 @@ namespace CluePaddle
       }
       return null;
     }
+  }
+
+  public class ClueByFourTest : ClueAITest<ClueByFour>
+  {
   }
 }
