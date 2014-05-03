@@ -15,6 +15,7 @@ namespace ClueBat
     private MurderSet? m_accusation;
     private bool m_firstMove;
     private int m_identity;
+    private MurderSet m_trickSuggest;
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
@@ -48,13 +49,19 @@ namespace ClueBat
         m_firstMove = false;
         if (m_suspects.Any() && m_weapons.Any() && m_rooms.Any())
         {
-          return new MurderSet(m_suspects.First(), m_weapons.First(), m_rooms.First());
+          m_trickSuggest = new MurderSet(m_suspects.First(), m_weapons.First(), m_rooms.First());
+          return m_trickSuggest;
         }
       }
 
       if (!m_suggestions.MoveNext())
       {
         throw new Exception("Run out of suggestions");
+      }
+      if (m_suggestions.Current.Equals(m_trickSuggest))
+      {
+        // We have already used this suggestion.
+        m_suggestions.MoveNext();
       }
       return m_suggestions.Current;
     }

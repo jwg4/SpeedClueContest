@@ -27,5 +27,14 @@ namespace ClueSharp.tests
       var l = set.Values.ToList();
       Assert.AreEqual(3, l.Count());
     }
+
+    [Test]
+    public void EqualityTest()
+    {
+      Assert.AreEqual(
+        new MurderSet(Suspect.ColMustard, Weapon.Knife, Room.Kitchen),
+        new MurderSet(Suspect.ColMustard, Weapon.Knife, Room.Kitchen)
+        );
+    }
   }
 }
