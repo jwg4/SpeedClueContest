@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,6 +53,16 @@ namespace ClueSharp
                from weapon in Card.AllWeapons
                from room in Card.AllRooms
                select new MurderSet(suspect, weapon, room);
+      }
+    }
+
+    public IEnumerable<Enum> Values
+    {
+      get
+      {
+        yield return Suspect;
+        yield return Weapon;
+        yield return Room;
       }
     }
   }

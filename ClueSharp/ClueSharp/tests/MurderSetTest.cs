@@ -19,5 +19,13 @@ namespace ClueSharp.tests
       const int total = (int)Suspect.Count * (int)Weapon.Count * (int)Room.Count;
       Assert.AreEqual(total, MurderSet.AllSuggestions.Count());
     }
+
+    [Test]
+    public void TestValues()
+    {
+      var set = new MurderSet(Suspect.ColMustard, Weapon.Revolver, Room.Lounge);
+      var l = set.Values.ToList();
+      Assert.AreEqual(3, l.Count());
+    }
   }
 }
