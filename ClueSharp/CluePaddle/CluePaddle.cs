@@ -16,6 +16,7 @@ namespace CluePaddle
     private CardTracker m_cardTracker;
     private Dictionary<int, List<Card>> m_alreadyShown;
     private static readonly Random Rnd = new Random();
+    private Dictionary<MurderSet, int> m_usedSuggestions;
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
@@ -33,6 +34,8 @@ namespace CluePaddle
       {
         m_alreadyShown[k] = new List<Card>();
       }
+
+      m_usedSuggestions = new Dictionary<MurderSet, int>();
     }
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
@@ -85,6 +88,18 @@ namespace CluePaddle
     {
       // todo: do this nicely?
       var maybes = m_cardTracker.Maybes;
+      MurderSet randomSuggestion;
+      do
+      {
+        randomSuggestion = GetRandomSuggestion(maybes);
+      } while (m_usedSuggestions.ContainsKey(randomSuggestion));
+
+      m_usedSuggestions[randomSuggestion] = 1;
+      return randomSuggestion;
+    }
+
+    private static MurderSet GetRandomSuggestion(List<Enum> maybes)
+    {
       if (!maybes.Any())
       {
         return new MurderSet(

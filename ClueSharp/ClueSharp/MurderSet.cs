@@ -23,6 +23,8 @@ namespace ClueSharp
       m_room = room;
     }
 
+    
+
     public Suspect Suspect
     {
       get { return m_suspect; }
