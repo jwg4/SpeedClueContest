@@ -30,19 +30,7 @@ namespace ClueSharp
 
     public override string ToString()
     {
-      if (m_suspect != Suspect.None)
-      {
-        return EnumConversion.Convert(m_suspect);
-      }
-      if (m_weapon != Weapon.None)
-      {
-        return EnumConversion.Convert(m_weapon);
-      }
-      if (m_room != Room.None)
-      {
-        return EnumConversion.Convert(m_room);
-      }
-      throw new Exception("Card doesn't have any valid values");
+      return EnumConversion.Convert(Value);
     }
 
     public override int GetHashCode()
@@ -107,6 +95,26 @@ namespace ClueSharp
         {
           yield return room;
         }
+      }
+    }
+
+    public Enum Value
+    {
+      get
+      {
+        if (m_suspect != Suspect.None)
+        {
+          return m_suspect;
+        }
+        if (m_weapon != Weapon.None)
+        {
+          return m_weapon;
+        }
+        if (m_room != Room.None)
+        {
+          return m_room;
+        }
+        throw new Exception("Card doesn't have any valid values");
       }
     }
   }
