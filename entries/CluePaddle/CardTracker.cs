@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ClueSharp;
 
@@ -94,7 +95,17 @@ namespace CluePaddle
             triplet.m_isActive = false;
           }
         }
+
+        changed = CheckWhatMustBeInEnvelope(changed);
       } while (changed);
+    }
+
+    private bool CheckWhatMustBeInEnvelope(bool changed)
+    {
+      changed = changed & m_mightHave.MustEnvelopeHaveIt(Card.AllSuspects.Cast<Enum>().ToList());
+      changed = changed & m_mightHave.MustEnvelopeHaveIt(Card.AllWeapons.Cast<Enum>().ToList());
+      changed = changed & m_mightHave.MustEnvelopeHaveIt(Card.AllRooms.Cast<Enum>().ToList());
+      return changed;
     }
 
     public void DoesHave(int disprover, Enum value)

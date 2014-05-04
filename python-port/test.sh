@@ -6,6 +6,9 @@ else
 fi
 BUF=--buf
 python3 -m speedclue $BUF --port $PORT --count 500 \
-    ../ClueSharp/ClueStick/bin/Debug/ClueStick.exe\
-    ../ClueSharp/ClueStick/bin/Debug/ClueStick.exe\
-    ../ClueSharp/ClueBat/bin/Debug/ClueBat.exe
+    ../entries/peter_taylor/dist/InferencePlayer.jar\
+    ../entries/peter_taylor/dist/SimpleCluedoPlayer.jar\
+    ../core/randomAI.jar\
+    ../entries/CluePaddle/bin/Debug/CluePaddle.exe\
+    ../entries/ClueByFour/bin/Debug/ClueByFour.exe\
+    ./simpleai.py

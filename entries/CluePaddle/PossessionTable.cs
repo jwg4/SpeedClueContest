@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ClueSharp;
 
@@ -82,6 +83,31 @@ namespace CluePaddle
     public bool NotKnown(Enum e)
     {
       return this[e][m_n];
+    }
+
+    internal bool MustEnvelopeHaveIt(List<Enum> list)
+    {
+      var ret = false;
+      var canOnlyBeInEnvelope = list.Where(x => !Enumerable.Range(0, m_n).Any(y => this[x][y])).ToList();
+      Debug.Assert(canOnlyBeInEnvelope.Count() < 2);
+      if (canOnlyBeInEnvelope.Count() == 1)
+      {
+        var inEnvelope = canOnlyBeInEnvelope.Single();
+        foreach (var x in list.Where(x => !x.Equals(inEnvelope)))
+        {
+          this[x][m_n] = false;
+        }
+        ret = true;
+      }
+
+      var onlyOnesWhichCanBeInEnvelope = list.Where(NotKnown).ToList();
+      Debug.Assert(onlyOnesWhichCanBeInEnvelope.Any());
+      if (onlyOnesWhichCanBeInEnvelope.Count() == 1)
+      {
+        DoesHave(m_n, onlyOnesWhichCanBeInEnvelope.Single());
+        ret = true;
+      }
+      return ret;
     }
   }
 }
