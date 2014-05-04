@@ -17,7 +17,8 @@ namespace CluePaddle
     private Dictionary<int, List<Card>> m_alreadyShown;
     private static readonly Random Rnd = new Random();
     private Dictionary<MurderSet, int> m_usedSuggestions;
-    private HashSet<Enum> m_alreadyBeenShown;
+    private HashSet<Enum> m_neverSuggest;
+    private int m_targetPlayer;
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
@@ -37,7 +38,9 @@ namespace CluePaddle
       }
 
       m_usedSuggestions = new Dictionary<MurderSet, int>();
-      m_alreadyBeenShown = new HashSet<Enum>();
+      m_neverSuggest = new HashSet<Enum>();
+
+      m_targetPlayer = (m_i + 1)%m_n;
     }
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
@@ -66,7 +69,7 @@ namespace CluePaddle
 
         if (suggester != m_i)
         {
-          m_alreadyBeenShown.Add(disproof.Value);
+          m_neverSuggest.Add(disproof.Value);
         }
       }
     }
@@ -138,7 +141,7 @@ namespace CluePaddle
     private Enum RandomEnum<T>(IEnumerable<T> l)
     {
       var list = l.Cast<Enum>()
-                  .Where(x => !m_alreadyBeenShown.Contains(x))
+                  .Where(x => !m_neverSuggest.Contains(x))
                   .ToList();
       var n = list.Count();
       Debug.Assert(n > 0);
@@ -149,7 +152,24 @@ namespace CluePaddle
     public MurderSet? Accuse()
     {
       m_cardTracker.ProcessInferences();
+      UpdateTargetPlayer();
       return m_cardTracker.GetAccusation();
+    }
+
+    private void UpdateTargetPlayer()
+    {
+      if (m_targetPlayer != m_i)
+      {
+        var toIgnore = m_cardTracker.CheckForAllTargetCards(m_targetPlayer);
+        if (toIgnore != null)
+        {
+          m_targetPlayer = (m_targetPlayer + 1)%m_n;
+          foreach (var card in toIgnore)
+          {
+            m_neverSuggest.Add(card);
+          }
+        }
+      }
     }
 
     public Card Disprove(int player, MurderSet suggestion)

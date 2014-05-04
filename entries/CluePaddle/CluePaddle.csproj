@@ -50,6 +50,7 @@
     <Compile Include="PossessionTable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tests\CardTrackerTest.cs" />
     <Compile Include="tests\CluePaddleTest.cs" />
     <Compile Include="tests\PossesionTableTest.cs" />
   </ItemGroup>

@@ -26,20 +26,28 @@ namespace CluePaddle
 
     }
 
-    internal void DoesHave(int i, Enum value)
+    internal bool DoesHave(int i, Enum value)
     {
-      var array = new bool[m_n + 1];
+      var changed = false;
+      var array = this[value];
       for (int j = 0; j <= m_n; j++)
       {
+        if (j == i) { continue; }
+        if (array[j])
+        {
+          changed = true;
+        }
         array[j] = false;
       }
       array[i] = true;
-      this[value] = array;
+      return changed;
     }
 
-    internal void DoesNotHave(int i, Enum value)
+    internal bool DoesNotHave(int i, Enum value)
     {
+      var ret = this[value][i];
       this[value][i] = false;
+      return ret;
     }
 
     internal Enum PlayerHasTwoOf(PlayerTriplet triplet)
@@ -85,29 +93,54 @@ namespace CluePaddle
       return this[e][m_n];
     }
 
-    internal bool MustEnvelopeHaveIt(List<Enum> list)
+    internal bool MustHavesAndMightHaves(List<Enum> list, int numberOfCards, int player)
     {
-      var ret = false;
-      var canOnlyBeInEnvelope = list.Where(x => !Enumerable.Range(0, m_n).Any(y => this[x][y])).ToList();
-      Debug.Assert(canOnlyBeInEnvelope.Count() < 2);
-      if (canOnlyBeInEnvelope.Count() == 1)
-      {
-        var inEnvelope = canOnlyBeInEnvelope.Single();
-        foreach (var x in list.Where(x => !x.Equals(inEnvelope)))
-        {
-          this[x][m_n] = false;
-        }
-        ret = true;
-      }
-
-      var onlyOnesWhichCanBeInEnvelope = list.Where(NotKnown).ToList();
-      Debug.Assert(onlyOnesWhichCanBeInEnvelope.Any());
-      if (onlyOnesWhichCanBeInEnvelope.Count() == 1)
-      {
-        DoesHave(m_n, onlyOnesWhichCanBeInEnvelope.Single());
-        ret = true;
-      }
+      bool ret = CountHowManyMustHaves(list, numberOfCards, player);
+      ret = ret & CountHowManyMightHaves(list, numberOfCards, player);
       return ret;
+    }
+
+    private bool CountHowManyMightHaves(List<Enum> list, int numberOfCards, int player)
+    {
+      var mightHave = list.Where(e => this[e][player]).ToList();
+      Debug.Assert(mightHave.Count() >= numberOfCards);
+      if (mightHave.Count() == numberOfCards)
+      {
+        var changed = false;
+        foreach (var card in mightHave)
+        {
+          changed = changed | DoesHave(player, card);
+        }
+        return changed;
+      }
+      return false;
+    }
+
+    private bool CountHowManyMustHaves(List<Enum> list, int numberOfCards, int player)
+    {
+      var mustHave = MustHaves(list, player);
+      Debug.Assert(mustHave.Count() <= numberOfCards);
+      if (mustHave.Count() == numberOfCards)
+      {
+        var changed = false;
+        foreach (var card in list.Where(x => mustHave.IndexOf(x) == -1))
+        {
+          changed = changed | DoesNotHave(player, card);
+        }
+        return changed;
+      }
+      return false;
+    }
+
+    public List<Enum> MustHaves(List<Enum> list, int player)
+    {
+      return list
+        .Where(x => !Enumerable
+                       .Range(0, m_n + 1)
+                       .Where(y => y != player)
+                       .Any(y => this[x][y])
+        )
+        .ToList();
     }
   }
 }

@@ -11,12 +11,30 @@ namespace CluePaddle
     private readonly PossessionTable m_mightHave;
     private readonly List<PlayerTriplet> m_doesntHaveAllOf;
     private readonly List<PlayerTriplet> m_hasOneOf;
+    private readonly int m_n;
+    private int[] m_numberOfCards;
 
     public CardTracker(int n)
     {
+      m_n = n;
       m_doesntHaveAllOf = new List<PlayerTriplet>();
       m_hasOneOf = new List<PlayerTriplet>();
       m_mightHave = new PossessionTable(n);
+
+      SetUpNumberOfCards();
+    }
+
+    public void SetUpNumberOfCards()
+    {
+      m_numberOfCards = new int[m_n];
+
+      var m = 18/m_n;
+      var r = 18%m_n;
+
+      for (int j = 0; j < m_n; j++)
+      {
+        NumberOfCards[j] = (j < r) ? m+1 : m;
+      }
     }
 
     public void SetMyCards(int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
@@ -97,14 +115,24 @@ namespace CluePaddle
         }
 
         changed = CheckWhatMustBeInEnvelope(changed);
+        changed = CheckHowManyCardsPerPlayer(changed);
       } while (changed);
+    }
+
+    private bool CheckHowManyCardsPerPlayer(bool changed)
+    {
+      for (int j = 0; j < m_n; j++)
+      {
+        changed = changed | m_mightHave.MustHavesAndMightHaves(Card.AllValues.ToList(), NumberOfCards[j], j);
+      }
+      return changed;
     }
 
     private bool CheckWhatMustBeInEnvelope(bool changed)
     {
-      changed = changed & m_mightHave.MustEnvelopeHaveIt(Card.AllSuspects.Cast<Enum>().ToList());
-      changed = changed & m_mightHave.MustEnvelopeHaveIt(Card.AllWeapons.Cast<Enum>().ToList());
-      changed = changed & m_mightHave.MustEnvelopeHaveIt(Card.AllRooms.Cast<Enum>().ToList());
+      changed = changed | m_mightHave.MustHavesAndMightHaves(Card.AllSuspects.Cast<Enum>().ToList(), 1,m_n);
+      changed = changed | m_mightHave.MustHavesAndMightHaves(Card.AllWeapons.Cast<Enum>().ToList(), 1, m_n);
+      changed = changed | m_mightHave.MustHavesAndMightHaves(Card.AllRooms.Cast<Enum>().ToList(), 1, m_n);
       return changed;
     }
 
@@ -116,6 +144,19 @@ namespace CluePaddle
     public List<Enum> Maybes
     {
       get { return Card.AllValues.Where(x => m_mightHave.NotKnown(x)).ToList(); }
+    }
+
+    public int[] NumberOfCards
+    {
+      get { return m_numberOfCards; }
+    }
+
+    public IEnumerable<Enum> CheckForAllTargetCards(int targetPlayer)
+    {
+      var list = m_mightHave.MustHaves(Card.AllValues.ToList(), targetPlayer);
+      return (list.Count() == m_numberOfCards[targetPlayer])
+               ? list
+               : null;
     }
   }
 }
