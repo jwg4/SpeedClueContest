@@ -58,7 +58,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tests\CardTest.cs" />
     <Compile Include="tests\ClueAITest.cs" />
-    <Compile Include="tests\IClueAITest.cs" />
     <Compile Include="tests\MurderSetTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

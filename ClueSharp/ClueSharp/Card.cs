@@ -80,7 +80,6 @@ namespace ClueSharp
 
     public static IEnumerable<Enum> AllValues
     {
-      // Todo: simplify this and MurderSet.AllCombinations
       get
       {
         foreach (var suspect in AllSuspects)

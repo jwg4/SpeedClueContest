@@ -42,27 +42,16 @@ namespace ClueBat
 
     public MurderSet Suggest()
     {
-<<<<<<< HEAD
-      // This takes advantage of the flaw in ClueStick to usually beat that AT
-      // 
-      if (m_firstMove)
-      {
-=======
       // This takes advantage of the flaw in ClueStick to usually beat that AI
       // 
       if (m_firstMove)
       {
         m_firstMove = false;
->>>>>>> Fix bug in ClueBat - m_firstMove didnt get set to false.
         if (m_suspects.Any() && m_weapons.Any() && m_rooms.Any())
         {
           m_trickSuggest = new MurderSet(m_suspects.First(), m_weapons.First(), m_rooms.First());
           return m_trickSuggest;
         }
-<<<<<<< HEAD
-        m_firstMove = false;
-=======
->>>>>>> Fix bug in ClueBat - m_firstMove didnt get set to false.
       }
 
       if (!m_suggestions.MoveNext())
