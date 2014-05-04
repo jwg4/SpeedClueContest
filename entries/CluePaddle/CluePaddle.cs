@@ -96,6 +96,8 @@ namespace CluePaddle
 
     public MurderSet Suggest()
     {
+      m_cardTracker.ProcessInferences();
+      UpdateTargetPlayer();
       // todo: do this nicely?
       var maybes = m_cardTracker.Maybes;
       MurderSet randomSuggestion;
@@ -152,7 +154,6 @@ namespace CluePaddle
     public MurderSet? Accuse()
     {
       m_cardTracker.ProcessInferences();
-      UpdateTargetPlayer();
       return m_cardTracker.GetAccusation();
     }
 
