@@ -17,6 +17,7 @@ namespace CluePaddle
     private Dictionary<int, List<Card>> m_alreadyShown;
     private static readonly Random Rnd = new Random();
     private Dictionary<MurderSet, int> m_usedSuggestions;
+    private HashSet<Enum> m_alreadyBeenShown;
 
     public void Reset(int n, int i, IEnumerable<Suspect> suspects, IEnumerable<Weapon> weapons, IEnumerable<Room> rooms)
     {
@@ -36,6 +37,7 @@ namespace CluePaddle
       }
 
       m_usedSuggestions = new Dictionary<MurderSet, int>();
+      m_alreadyBeenShown = new HashSet<Enum>();
     }
 
     public void Suggestion(int suggester, MurderSet suggestion, int? disprover, Card disproof)
@@ -61,6 +63,11 @@ namespace CluePaddle
         // We know who disproved it and what they showed.
         Debug.Assert(disprover != null, "disproof is not null but disprover is null");
         m_cardTracker.DoesHave((int)disprover, disproof.Value);
+
+        if (suggester != m_i)
+        {
+          m_alreadyBeenShown.Add(disproof.Value);
+        }
       }
     }
 
@@ -98,50 +105,45 @@ namespace CluePaddle
       return randomSuggestion;
     }
 
-    private static MurderSet GetRandomSuggestion(List<Enum> maybes)
+    private MurderSet GetRandomSuggestion(List<Enum> maybes)
     {
-      if (!maybes.Any())
-      {
-        return new MurderSet(
-          RandomEnum(Card.AllSuspects.ToList()),
-          RandomEnum(Card.AllWeapons.ToList()),
-          RandomEnum(Card.AllRooms.ToList())
-          );
-      }
-
       var maybe = RandomEnum(maybes);
 
       if (maybe is Suspect)
       {
         return new MurderSet(maybe,
-                             RandomEnum(Card.AllWeapons.ToList()),
-                             RandomEnum(Card.AllRooms.ToList())
+                             RandomEnum(Card.AllWeapons),
+                             RandomEnum(Card.AllRooms)
           );
       }
       if (maybe is Weapon)
       {
         return new MurderSet(
-          RandomEnum(Card.AllSuspects.ToList()),
+          RandomEnum(Card.AllSuspects),
           maybe,
-          RandomEnum(Card.AllRooms.ToList())
+          RandomEnum(Card.AllRooms)
           );
       }
       if (maybe is Room)
       {
         return new MurderSet(
-          RandomEnum(Card.AllSuspects.ToList()),
-          RandomEnum(Card.AllWeapons.ToList()),
+          RandomEnum(Card.AllSuspects),
+          RandomEnum(Card.AllWeapons),
           maybe
           );
       }
       throw new Exception("Got a value back which isn't anything.");
     }
 
-    private static T RandomEnum<T>(List<T> l)
+    private Enum RandomEnum<T>(IEnumerable<T> l)
     {
-      var n = l.Count();
+      var list = l.Cast<Enum>()
+                  .Where(x => !m_alreadyBeenShown.Contains(x))
+                  .ToList();
+      var n = list.Count();
+      Debug.Assert(n > 0);
       var i = Rnd.Next(0, n);
-      return l[i];
+      return list[i];
     }
 
     public MurderSet? Accuse()
